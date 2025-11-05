@@ -58,14 +58,16 @@ Purpose:  This project will show you the difference between member functions and
 #include <string>
 struct T
 {
-    T(<#type name#> v, const char* <#variable name#>)   //1
-    //2
-    //3
+    T(int v, const char* n);//1
+    int value;//2
+    std::string name;//3
 };
 
-struct <#structName1#>                                //4
+T::T(int v, const char* n) : value(v), name(n) {}
+
+struct eval                                //4
 {
-    <#type name#> compare(<#type name#> a, <#type name#> b) //5
+    T* compare(T* a, T* b) //5
     {
         if( a->value < b->value ) return a;
         if( a->value > b->value ) return b;
@@ -82,7 +84,7 @@ struct U
     }
 };
 
-struct <#structname2#>
+struct staticStruct
 {
     static <#returntype#> <#staticFunctionA#>(U* that, <#type name#>* <#updatedValue#> )        //10
     {
@@ -117,12 +119,12 @@ struct <#structname2#>
 
 int main()
 {
-    T <#name1#>( , );                                             //6
-    T <#name2#>( , );                                             //6
-    
-    <#structName1#> f;                                            //7
-    auto* smaller = f.compare( , );                              //8
-    std::cout << "the smaller one is << " << smaller->name << std::endl; //9
+    T highValue(10, "High Value");                                             //6
+    T lowValue(1, "Low Value");                                             //6
+
+    eval f;                                            //7
+    auto* smaller = f.compare(&highValue, &lowValue);                              //8
+    if (smaller != nullptr) {std::cout << "the smaller one is << " << smaller->name << std::endl;} //9
     
     U <#name3#>;
     float updatedValue = 5.f;
