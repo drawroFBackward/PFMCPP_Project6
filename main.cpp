@@ -65,7 +65,7 @@ struct T
 
 T::T(int v, const char* n) : value(v), name(n) {}
 
-struct eval                                //4
+struct Eval                                //4
 {
     T* compare(T* a, T* b) //5
     {
@@ -99,7 +99,7 @@ struct U
     }
 };
 
-struct staticStruct
+struct StaticStruct
 {
     static float staticFunction(U* that, float* updatedValue )        //10
     {
@@ -141,13 +141,14 @@ int main()
     T highValue(10, "High Value");                                             //6
     T lowValue(1, "Low Value");                                             //6
 
-    eval f;                                            //7
+    Eval f;                                            //7
     auto* smaller = f.compare(&highValue, &lowValue);                              //8
     if (smaller != nullptr) {std::cout << "the smaller one is << " << smaller->name << std::endl;} //9
     
     U values1;
+    U values1;
     float updatedValue = 5.f;
-    std::cout << "staticfuntion's multiplied values: " << staticStruct::staticFunction( &values1, &updatedValue) << std::endl;                  //11
+    std::cout << "staticfuntion's multiplied values: " << StaticStruct::staticFunction( &values1, &updatedValue) << std::endl;                  //11
     
     U values2;
     std::cout << "member function's multiplied values: " << values2.memberFunction( &updatedValue ) << std::endl;
