@@ -27,27 +27,26 @@
 #include <string>
 struct T
 {
-    T(int v, const char* n);//1
-    int value;//2
-    std::string name;//3
+    T(int v, const char* n);
+    int value;
+    std::string name;
 };
 
 T::T(int v, const char* n) : value(v), name(n) {}
 
-struct Eval                                //4
+struct Eval                                
 {
-    T* compare(T* a, T* b) //5
+    T& compare(T& a, T& b) 
     {
         if( a->value < b->value ) return a;
         if( a->value > b->value ) return b;
-        return nullptr;
     }
 };
 
 struct U
 {
     float firstValue { 0 }, secondValue { 0 };
-    float memberFunction(float* updatedValue)      //12
+    float memberFunction(float* updatedValue)      
     {
         if (updatedValue != nullptr)
         {
@@ -70,16 +69,13 @@ struct U
 
 struct StaticStruct
 {
-    static float staticFunction(U* that, float* updatedValue )        //10
+    static float staticFunction(U* that, float* updatedValue )        
     {
         std::cout << "U's X value: " << that->firstValue << std::endl;
         that->firstValue = *updatedValue;
         std::cout << "U's X updated value: " << that->firstValue << std::endl;
         while( std::abs(that->secondValue - that->firstValue) > 0.001f )
         {
-            /*
-             write something that makes the distance between that-><#name2#> and that-><#name1#> get smaller
-             */
             while (std::abs(that->secondValue - that->firstValue) > 0.1f)
             {
 				that->secondValue += (that->firstValue > that->secondValue) ? 0.1f : -0.1f;
@@ -90,34 +86,20 @@ struct StaticStruct
         return that->secondValue * that->firstValue;
     }
 };
-        
-/*
- MAKE SURE YOU ARE NOT ON THE MASTER BRANCH
-
- Commit your changes by clicking on the Source Control panel on the left, entering a message, and click [Commit and push].
- 
- If you didn't already: 
-    Make a pull request after you make your first commit
-    pin the pull request link and this repl.it link to our DM thread in a single message.
-
- send me a DM to review your pull request when the project is ready for review.
-
- Wait for my code review.
- */
 
 int main()
 {
-    T highValue(10, "High Value");                                             //6
-    T lowValue(1, "Low Value");                                             //6
+    T highValue(10, "High Value");                                            
+    T lowValue(1, "Low Value");                                          
 
-    Eval f;                                            //7
-    auto* smaller = f.compare(&highValue, &lowValue);                              //8
-    if (smaller != nullptr) {std::cout << "the smaller one is << " << smaller->name << std::endl;} //9
+    Eval f;                                           
+    auto* smaller = f.compare(&highValue, &lowValue);                              
+    if (smaller != nullptr) {std::cout << "the smaller one is << " << smaller->name << std::endl;} 
     
     U values1;
     U values1;
     float updatedValue = 5.f;
-    std::cout << "staticfuntion's multiplied values: " << StaticStruct::staticFunction( &values1, &updatedValue) << std::endl;                  //11
+    std::cout << "staticfuntion's multiplied values: " << StaticStruct::staticFunction( &values1, &updatedValue) << std::endl;                
     
     U values2;
     std::cout << "member function's multiplied values: " << values2.memberFunction( &updatedValue ) << std::endl;
