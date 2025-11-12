@@ -36,54 +36,50 @@ T::T(int v, const char* n) : value(v), name(n) {}
 
 struct Eval                                
 {
-    T& compare(T& a, T& b) 
+    T& compare(T& a, T& b)
     {
-        if( a->value < b->value ) return a;
-        if( a->value > b->value ) return b;
+        if (a.value <= b.value) return a;
+		return b;
     }
 };
 
 struct U
 {
     float firstValue { 0 }, secondValue { 0 };
-    float memberFunction(float* updatedValue)      
+    float memberFunction(float& updatedValue)
     {
-        if (updatedValue != nullptr)
+		std::cout << "U's X value: " << firstValue << std::endl;
+		firstValue = updatedValue;
+		std::cout << "U's X updated value: " << firstValue << std::endl;
+        while (std::abs(secondValue - firstValue) > 0.001f)
         {
-			std::cout << "U's X value: " << firstValue << std::endl;
-			firstValue = *updatedValue;
-			std::cout << "U's X updated value: " << firstValue << std::endl;
-            while (std::abs(secondValue - firstValue) > 0.001f)
+            while (std::abs(secondValue - firstValue) > 0.1f)
             {
-                while (std::abs(secondValue - firstValue) > 0.1f)
-                {
-                    secondValue += (firstValue > secondValue) ? 0.1f : -0.1f;
-                }
-                secondValue += (firstValue > secondValue) ? 0.001f : -0.001f;
-			}
+                secondValue += (firstValue > secondValue) ? 0.1f : -0.1f;
+            }
+            secondValue += (firstValue > secondValue) ? 0.001f : -0.001f;
 		}
-		std::cout << "nullptr passed to memberFunction." << std::endl;
-        return firstValue;
-    }
+        return firstValue * secondValue;
+	}
 };
 
 struct StaticStruct
 {
-    static float staticFunction(U* that, float* updatedValue )        
+    static float staticFunction(U& that, float& updatedValue )        
     {
-        std::cout << "U's X value: " << that->firstValue << std::endl;
-        that->firstValue = *updatedValue;
-        std::cout << "U's X updated value: " << that->firstValue << std::endl;
-        while( std::abs(that->secondValue - that->firstValue) > 0.001f )
+        std::cout << "U's X value: " << that.firstValue << std::endl;
+        that.firstValue = updatedValue;
+        std::cout << "U's X updated value: " << that.firstValue << std::endl;
+        while( std::abs(that.secondValue - that.firstValue) >= 0.001f )
         {
-            while (std::abs(that->secondValue - that->firstValue) > 0.1f)
+            while (std::abs(that.secondValue - that.firstValue) > 0.1f)
             {
-				that->secondValue += (that->firstValue > that->secondValue) ? 0.1f : -0.1f;
+				that.secondValue += (that.firstValue > that.secondValue) ? 0.1f : -0.1f;
             }
-			that->secondValue += (that->firstValue > that->secondValue) ? 0.001f : -0.001f;
+			that.secondValue += (that.firstValue > that.secondValue) ? 0.001f : -0.001f;
         }
-        std::cout << "U's Y updated value: " << that->secondValue << std::endl;
-        return that->secondValue * that->firstValue;
+        std::cout << "U's Y updated value: " << that.secondValue << std::endl;
+        return that.secondValue * that.firstValue;
     }
 };
 
@@ -93,14 +89,13 @@ int main()
     T lowValue(1, "Low Value");                                          
 
     Eval f;                                           
-    auto* smaller = f.compare(&highValue, &lowValue);                              
-    if (smaller != nullptr) {std::cout << "the smaller one is << " << smaller->name << std::endl;} 
+    auto& smaller = f.compare(highValue, lowValue);                              
+    std::cout << "the smaller one is << " << smaller.name << std::endl;
     
-    U values1;
     U values1;
     float updatedValue = 5.f;
-    std::cout << "staticfuntion's multiplied values: " << StaticStruct::staticFunction( &values1, &updatedValue) << std::endl;                
+    std::cout << "staticfuntion's multiplied values: " << StaticStruct::staticFunction( values1, updatedValue) << std::endl;                
     
     U values2;
-    std::cout << "member function's multiplied values: " << values2.memberFunction( &updatedValue ) << std::endl;
+    std::cout << "member function's multiplied values: " << values2.memberFunction( updatedValue ) << std::endl;
 }
